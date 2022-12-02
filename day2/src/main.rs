@@ -11,9 +11,10 @@ fn main() {
     let split: Vec<Game> = contents.lines().map(
         |s| {
             let splitted_game: Vec<&str> = s.split(" ").collect();
+            let requiredMove = get_required_move(String::from(splitted_game[0]), String::from(splitted_game[1]));
             return Game {
                 opponent: String::from(splitted_game[0]),
-                my_move: String::from(splitted_game[1]),
+                my_move: String::from(requiredMove),
             };
         }
     ).collect();
@@ -60,6 +61,7 @@ fn evaluate(opponent: String, my_move: String) -> u32 {
     println!("Opponent: {}, MyMove: {}, result: {}", opponent, string, result);
     result
 }
+
 // A ROCK X ROCK
 // B PAPER Y PAPER
 // C SCISSOR Z SCISSOR
@@ -70,4 +72,37 @@ fn evaluate_my_move(my_move: String) -> u32 {
         "Z" => 3,
         _ => 0
     }
+}
+
+//X -> Lose
+//Y -> Draw
+//Z -> Win
+// A ROCK X ROCK
+// B PAPER Y PAPER
+// C SCISSOR Z SCISSOR
+fn get_required_move(opponent: String, expected_result: String) -> String {
+    String::from(match expected_result.as_str() {
+        "X" => {
+            match opponent.as_str() {
+                "A" => "Z",
+                "B" => "X",
+                _ => "Y"
+            }
+        }
+        "Y" => {
+            match opponent.as_str() {
+                "A" => "X",
+                "B" => "Y",
+                _ => "Z"
+            }
+        }
+        "Z" => {
+            match opponent.as_str() {
+                "A" => "Y",
+                "B" => "Z",
+                _ => "X"
+            }
+        }
+        _ => ""
+    })
 }
